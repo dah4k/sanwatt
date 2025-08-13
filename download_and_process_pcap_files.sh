@@ -27,8 +27,11 @@ PCAP_FILES="
 
 BASE_URL="https://share.netresec.com/s/7qgDSGNGw2NY8ea"
 for x in $PCAP_FILES; do
-    [ -f "$x" ] && continue
     echo "[+] Fetching $x ..."
     curl -s -L -C - -o "$x.gz" "$BASE_URL/download?path=%2F&files=$x.gz"
     gunzip "$x.gz"
+
+    echo "[+] Suricata processing $x ..."
+    suricata -c /etc/suricata/suricata.yaml -r $x
+    zstd $x --rm
 done
