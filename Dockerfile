@@ -7,6 +7,7 @@ RUN zypper --quiet --non-interactive refresh \
  && zypper --quiet --non-interactive install --no-recommends \
         curl \
         suricata \
+        wireshark \
         zstd \
  && zypper --quiet --non-interactive clean
 

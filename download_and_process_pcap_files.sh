@@ -33,5 +33,8 @@ for x in $PCAP_FILES; do
 
     echo "[+] Suricata processing $x ..."
     suricata -c /etc/suricata/suricata.yaml -r $x
-    zstd $x --rm
+
+    echo "[+] Lossy archiving $x ..."
+    editcap -F pcap -s 400 $x truncated_$x && rm $x
+    zstd truncated_$x --rm
 done
