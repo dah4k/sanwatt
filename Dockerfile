@@ -6,7 +6,11 @@ FROM opensuse/tumbleweed:latest
 RUN zypper --quiet --non-interactive refresh \
  && zypper --quiet --non-interactive install --no-recommends \
         curl \
+        jq \
+        ripgrep \
         suricata \
+        vim \
+        vim-data \
         zstd \
  && zypper --quiet --non-interactive clean
 
