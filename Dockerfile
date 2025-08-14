@@ -12,6 +12,8 @@ RUN zypper --quiet --non-interactive refresh \
 
 WORKDIR /results
 
+COPY config/suricata.yaml /etc/suricata/suricata.yaml
+
 COPY download_and_process_pcap_files.sh .
 
 RUN ./download_and_process_pcap_files.sh && zstd *.json *.log --rm
