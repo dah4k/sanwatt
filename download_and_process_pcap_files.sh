@@ -32,9 +32,5 @@ for x in $PCAP_FILES; do
     gunzip "$x.gz"
 
     echo "[+] Suricata processing $x ..."
-    suricata -c /etc/suricata/suricata.yaml -r $x
-
-    echo "[+] Lossy archiving $x ..."
-    editcap -F pcap -s 400 $x truncated_$x && rm $x
-    zstd truncated_$x --rm
+    suricata -c /etc/suricata/suricata.yaml -r $x --pcap-file-delete
 done
