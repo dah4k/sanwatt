@@ -1,3 +1,6 @@
+# Copyright 2025 dah4k
+# SPDX-License-Identifier: EPL-2.0
+---
 name: Docker Image CI
 
 on:
@@ -27,7 +30,16 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    # References:
+    # - https://stackoverflow.com/questions/60942067/get-current-date-and-time-in-github-workflows/
+    # - https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands#setting-an-output-parameter/
+    - name: Get current date
+      id: current-date
+      run: echo "ISO=$(date +'%Y%m%d')" >> "$GITHUB_OUTPUT"
+
     - name: Build and Publish the Docker image
+      env:
+        TAG_NAME: ghcr.io/${{ github.repository }}:${{ steps.current-date.outputs.ISO }}
       run: |
-        docker build . --file Dockerfile --tag ghcr.io/${{ github.repository }}:$(date +%Y%m%d)
-        docker push ghcr.io/${{ github.repository }}:$(date +%Y%m%d)
+        docker build . --file Dockerfile --tag $TAG_NAME
+        docker push $TAG_NAME
