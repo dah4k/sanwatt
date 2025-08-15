@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: EPL-2.0
 
 DOCKER      ?= docker
-NAME        ?= suricata
-_TAG        := local/$(NAME)
+APP_NAME    ?= $(shell basename $(PWD))
+_TAG        := local/$(APP_NAME)
 _ANSI_NORM  := \033[0m
 _ANSI_CYAN  := \033[36m
 
@@ -21,7 +21,7 @@ all: $(_TAG) ## Build container image
 
 .PHONY: test
 test: $(_TAG) ## Test run container image
-	$(DOCKER) run --rm --name=$(NAME) $(_TAG)
+	$(DOCKER) run --rm --name=$(APP_NAME) $(_TAG)
 
 .PHONY: debug
 debug: $(_TAG) ## Debug container image
