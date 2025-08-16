@@ -1,7 +1,7 @@
 # Copyright 2025 dah4k
 # SPDX-License-Identifier: EPL-2.0
 
-FROM opensuse/tumbleweed:latest
+FROM opensuse/tumbleweed:latest AS data
 
 RUN zypper --quiet --non-interactive refresh \
  && zypper --quiet --non-interactive install --no-recommends \
@@ -14,7 +14,7 @@ RUN zypper --quiet --non-interactive refresh \
         zstd \
  && zypper --quiet --non-interactive clean
 
-WORKDIR /results
+WORKDIR /data
 
 COPY config/suricata.yaml /etc/suricata/suricata.yaml
 

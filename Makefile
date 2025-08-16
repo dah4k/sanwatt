@@ -3,7 +3,7 @@
 
 DOCKER      ?= docker
 APP_NAME    ?= $(shell basename $(PWD))
-_TAG        := local/$(APP_NAME)
+_TAG        := local/$(APP_NAME)-data
 _ANSI_NORM  := \033[0m
 _ANSI_CYAN  := \033[36m
 
@@ -13,8 +13,8 @@ help usage:
 		| awk 'BEGIN {FS = ":.*?##"}; {printf "$(_ANSI_CYAN)%-20s$(_ANSI_NORM) %s\n", $$1, $$2}'
 
 .PHONY: $(_TAG)
-$(_TAG): Dockerfile
-	$(DOCKER) build --tag $(_TAG) --file Dockerfile .
+$(_TAG): Dockerfile-data
+	$(DOCKER) build --tag $(_TAG) --file Dockerfile-data .
 
 .PHONY: all
 all: $(_TAG) ## Build container image
