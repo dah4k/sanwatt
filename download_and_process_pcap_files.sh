@@ -26,11 +26,16 @@ PCAP_FILES="
 "
 
 BASE_URL="https://share.netresec.com/s/7qgDSGNGw2NY8ea"
+
+PCAP_DIR="/data/pcaps"
+[ -d $PCAP_DIR ] || mkdir -p $PCAP_DIR
+
 for x in $PCAP_FILES; do
     echo "[+] Fetching $x ..."
-    curl -s -L -C - -o "$x.gz" "$BASE_URL/download?path=%2F&files=$x.gz"
-    gunzip "$x.gz"
+    curl -s -L -C - -o "$PCAP_DIR/$x.gz" "$BASE_URL/download?path=%2F&files=$x.gz"
+    gunzip "$PCAP_DIR/$x.gz"
 
     echo "[+] Suricata processing $x ..."
-    suricata -c /etc/suricata/suricata.yaml -r $x --pcap-file-delete
+    suricata -c /etc/suricata/suricata.yaml -r "$PCAP_DIR/$x"
+    zstd "$PCAP_DIR/$x" --rm
 done

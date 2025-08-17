@@ -14,7 +14,7 @@ RUN zypper --quiet --non-interactive refresh \
         zstd \
  && zypper --quiet --non-interactive clean
 
-WORKDIR /data
+WORKDIR /data/logs
 
 COPY config/suricata.yaml /etc/suricata/suricata.yaml
 
