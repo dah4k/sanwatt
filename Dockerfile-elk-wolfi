@@ -1,0 +1,18 @@
+# Copyright 2025 dah4k
+# SPDX-License-Identifier: EPL-2.0
+
+FROM docker.elastic.co/elasticsearch/elasticsearch-wolfi:9.1.2
+
+USER root
+
+RUN apk --update --no-cache add \
+        curl \
+        jq  \
+        kibana \
+        logstash \
+        ripgrep \
+        supervisor \
+        suricata \
+        vim \
+        zstd \
+ && rm -rf /var/cache/apk
