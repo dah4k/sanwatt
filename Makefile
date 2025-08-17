@@ -3,7 +3,7 @@
 
 DOCKER      ?= docker
 APP_NAME    ?= $(shell basename $(PWD))
-_TAG        := local/$(APP_NAME)-data
+_TAG        := local/$(APP_NAME)
 _ANSI_NORM  := \033[0m
 _ANSI_CYAN  := \033[36m
 
@@ -13,15 +13,18 @@ help usage:
 		| awk 'BEGIN {FS = ":.*?##"}; {printf "$(_ANSI_CYAN)%-20s$(_ANSI_NORM) %s\n", $$1, $$2}'
 
 .PHONY: $(_TAG)
-$(_TAG): Dockerfile-data
-	$(DOCKER) build --tag $(_TAG) --file Dockerfile-data .
+$(_TAG): $(_TAG)-elk
+	$(DOCKER) tag $< $@
+
+$(_TAG)-%: Dockerfile-%
+	$(DOCKER) build --tag $@ --file $< .
 
 .PHONY: all
 all: $(_TAG) ## Build container image
 
 .PHONY: test
 test: $(_TAG) ## Test run container image
-	$(DOCKER) run --rm --name=$(APP_NAME) $(_TAG)
+	$(DOCKER) run --rm --name=$(APP_NAME) -p 9200:9200 $(_TAG)
 
 .PHONY: debug
 debug: $(_TAG) ## Debug container image
@@ -29,7 +32,7 @@ debug: $(_TAG) ## Debug container image
 
 .PHONY: clean
 clean: ## Remove container image
-	$(DOCKER) image remove --force $(_TAG)
+	$(DOCKER) image remove --force $(_TAG) $(_TAG)-elk
 
 .PHONY: distclean
 distclean: clean ## Prune all container images

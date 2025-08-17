@@ -39,7 +39,7 @@ jobs:
 
     - name: Build and Publish the Docker image
       env:
-        TAG_NAME: ghcr.io/${{ github.repository }}-data:${{ steps.current-date.outputs.ISO }}
+        TAG_NAME: ghcr.io/${{ github.repository }}-elk:${{ steps.current-date.outputs.ISO }}
       run: |
-        docker build . --file Dockerfile-data --tag $TAG_NAME
+        docker build . --file Dockerfile-elk --tag $TAG_NAME
         docker push $TAG_NAME

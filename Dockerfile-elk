@@ -1,0 +1,35 @@
+# Copyright 2025 dah4k
+# SPDX-License-Identifier: EPL-2.0
+
+FROM opensuse/tumbleweed:latest AS elk
+
+RUN rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+COPY config/elasticsearch.repo config/logstash.repo config/kibana.repo /etc/zypp/repos.d/
+
+RUN zypper modifyrepo --enable elasticsearch logstash-9.x kibana-9.X \
+ && zypper --quiet --non-interactive refresh \
+ && zypper --quiet --non-interactive install --no-recommends \
+        curl \
+        elasticsearch \
+        jq \
+        kibana \
+        logstash \
+        ripgrep \
+        supervisor \
+        vim \
+        vim-data \
+        zstd \
+ && zypper --quiet --non-interactive clean
+
+COPY config/supervisord.conf /etc/supervisord.conf
+
+# Fix missing parent directory for elasticsearch.pid
+RUN mkdir /run/elasticsearch \
+ && chown elasticsearch:elasticsearch /run/elasticsearch
+
+VOLUME /var/lib/elasticsearch
+
+EXPOSE 9200
+
+ENTRYPOINT ["/usr/bin/supervisord"]
+CMD ["-c", "/etc/supervisord.conf"]
