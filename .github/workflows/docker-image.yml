@@ -44,7 +44,7 @@ jobs:
 
     - name: Build and Publish the Docker image
       env:
-        TAG_NAME: ghcr.io/${{ env.REPO_OWNER }}/sanwatt-elk:${{ env.CURRENT_DATE }}
+        TAG_NAME: ghcr.io/${{ env.REPO_OWNER }}/sanwatt-suricata:${{ env.CURRENT_DATE }}
       run: |
-        docker build . --file Dockerfile-elk --tag $TAG_NAME
+        docker build . --file Dockerfile-suricata --tag $TAG_NAME
         docker push $TAG_NAME

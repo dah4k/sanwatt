@@ -13,7 +13,7 @@ help usage:
 		| awk 'BEGIN {FS = ":.*?##"}; {printf "$(_ANSI_CYAN)%-20s$(_ANSI_NORM) %s\n", $$1, $$2}'
 
 .PHONY: $(_TAG)
-$(_TAG): $(_TAG)-elk
+$(_TAG): $(_TAG)-suricata
 	$(DOCKER) tag $< $@
 
 $(_TAG)-%: Dockerfile-%
@@ -24,7 +24,7 @@ all: $(_TAG) ## Build container image
 
 .PHONY: test
 test: $(_TAG) ## Test run container image
-	$(DOCKER) run --rm --name=$(APP_NAME) -p 9200:9200 $(_TAG)
+	$(DOCKER) run --rm --name=$(APP_NAME) -v ./pcaps:/data/pcaps -v ./logs:/data/logs -v ./QUARANTINE:/data/QUARANTINE $(_TAG)
 
 .PHONY: debug
 debug: $(_TAG) ## Debug container image
