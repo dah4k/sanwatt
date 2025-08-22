@@ -33,13 +33,18 @@ jobs:
     # References:
     # - https://stackoverflow.com/questions/60942067/get-current-date-and-time-in-github-workflows/
     # - https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands#setting-an-output-parameter/
+    # - https://actuated.com/blog/multi-arch-docker-github-actions
     - name: Get current date
-      id: current-date
-      run: echo "ISO=$(date +'%Y%m%d')" >> "$GITHUB_OUTPUT"
+      id: get-current-date
+      run: echo "CURRENT_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+
+    - name: Get repo owner
+      id: get-repo-owner
+      run: echo "REPO_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
     - name: Build and Publish the Docker image
       env:
-        TAG_NAME: ghcr.io/${{ github.repository }}-elk:${{ steps.current-date.outputs.ISO }}
+        TAG_NAME: ghcr.io/${{ env.REPO_OWNER }}/sanwatt-elk:${{ env.CURRENT_DATE }}
       run: |
         docker build . --file Dockerfile-elk --tag $TAG_NAME
         docker push $TAG_NAME
