@@ -1,0 +1,11 @@
+# Copyright 2025 dah4k
+# SPDX-License-Identifier: EPL-2.0
+---
+services:
+  suricata:
+    build:
+      context: .
+      dockerfile: Dockerfile-suricata
+    volumes:
+      - ./pcaps:/data/pcaps
+      - ./logs:/data/logs

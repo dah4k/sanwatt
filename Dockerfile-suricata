@@ -17,12 +17,6 @@ RUN zypper --quiet --non-interactive refresh \
 
 RUN freshclam && suricata-update
 
-ARG PCAP_DIR="/data/pcaps"
-ARG LOG_DIR="/data/logs"
-ARG QUARANTINE_DIR="/data/QUARANTINE"
-
-RUN mkdir -p $PCAP_DIR $LOG_DIR $QUARANTINE_DIR
-
 COPY config/suricata.yaml /etc/suricata/suricata.yaml
 COPY config/file-store-all.rules /etc/suricata/rules/file-store-all.rules
 
@@ -30,7 +24,5 @@ WORKDIR /app
 
 COPY process_pcap_files.sh /app/process_pcap_files.sh
 
-WORKDIR /data
-
 ENTRYPOINT ["/app/process_pcap_files.sh"]
-CMD ["$PCAP_DIR", "$LOG_DIR", "$QUARANTINE_DIR"]
+CMD ["/data/pcaps", "/data/logs"]

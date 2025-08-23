@@ -2,8 +2,6 @@
 # Copyright 2025 dah4k
 # SPDX-License-Identifier: EPL-2.0
 
-set -e
-
 if [ $# -ne 1 ]; then
     echo Usage: $0 DOWNLOAD_PCAP_DIR
     exit 1

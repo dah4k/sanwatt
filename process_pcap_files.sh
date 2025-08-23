@@ -2,16 +2,16 @@
 # Copyright 2025 dah4k
 # SPDX-License-Identifier: EPL-2.0
 
-set -e
-
-if [ $# -ne 3 ]; then
-    echo Usage: $0 PCAP_DIR LOG_DIR QUARANTINE_DIR
+if [ $# -ne 2 ]; then
+    echo Usage: $0 PCAP_DIR LOG_DIR
     exit 1
 fi
 
 PCAP_DIR=$1
 LOG_DIR=$2
-QUARANTINE_DIR=$3
+
+QUARANTINE_DIR="/datatmp/QUARANTINE"
+[ -d $QUARANTINE_DIR ] || mkdir -p $QUARANTINE_DIR
 
 shopt -s failglob
 for x in $PCAP_DIR/*.pcap.gz; do
@@ -21,7 +21,9 @@ for x in $PCAP_DIR/*.pcap.gz; do
     suricata -c /etc/suricata/suricata.yaml -l $LOG_DIR -r $y --pcap-file-delete
 done
 
-clamscan --recursive --suppress-ok-results --exclude=.gitignore --log=$LOG_DIR/clamav.log $QUARANTINE_DIR
+zstd --force --rm $LOG_DIR/{eve.json,fast.log}
 
-find $LOG_DIR -type f -name "*.json" -exec zstd --force --rm {} \;
-find $LOG_DIR -type f -name "*.log" -exec zstd --force --rm {} \;
+clamscan --suppress-ok-results --log=$LOG_DIR/clamav.log --recursive $QUARANTINE_DIR
+
+# clamscan returning 1 when finding infected files...
+exit 0

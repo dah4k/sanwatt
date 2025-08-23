@@ -498,7 +498,7 @@ outputs:
 
       # Set the directory for the filestore. Relative pathnames
       # are contained within the "default-log-dir".
-      dir: /data/QUARANTINE
+      dir: /datatmp/QUARANTINE
 
       # Write out a fileinfo record for each occurrence of a file.
       # Disabled by default as each occurrence is already logged
