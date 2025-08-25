@@ -6,7 +6,7 @@ APP_NAME    ?= $(shell basename $(PWD))
 _TAG        := local/$(APP_NAME)
 _ANSI_NORM  := \033[0m
 _ANSI_CYAN  := \033[36m
-_MOUNTS     := -v ./pcaps:/data/pcaps -v ./logs:/data/logs
+_MOUNTS     := -v ./pcaps:/data/pcaps -v ./logs:/data/logs -v ./INFECTED:/data/INFECTED
 
 .PHONY: help usage
 help usage:

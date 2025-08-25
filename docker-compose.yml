@@ -9,3 +9,4 @@ services:
     volumes:
       - ./pcaps:/data/pcaps
       - ./logs:/data/logs
+      - ./INFECTED:/data/INFECTED
